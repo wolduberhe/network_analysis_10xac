@@ -9,7 +9,6 @@ from datetime import datetime
 from time import sleep
 
 
-
 # Create wrapper classes for using slack_sdk in place of slacker
 class SlackDataLoader:
     '''
@@ -25,7 +24,7 @@ class SlackDataLoader:
     
     These files contain metadata about the conversations, including their names and IDs.
 
-    For secruity reason, we have annonymized names - the names you will see are generated using faker library.
+    For security reason, we have anonymized names - the names you will see are generated using the faker library.
     
     '''
     def __init__(self, path):
@@ -35,7 +34,6 @@ class SlackDataLoader:
         self.path = "/Users/mebmeressa/10academy/network_analysis_10xac/data/"
         self.channels = self.get_channels()
         self.users = self.get_users()
-    
 
     def get_users(self):
         '''
@@ -72,33 +70,34 @@ class SlackDataLoader:
             userNamesById[user['id']] = user['name']
             userIdsByName[user['name']] = user['id']
         return userNamesById, userIdsByName     
-    # those functions are copied from noteboo/parse_slack_data.ipynb
+    # those functions are copied from notebook/parse_slack_data.ipynb
     def convert_2_timestamp(column, data):
-        """convert from unix time to readable timestamp
-            args: column: columns that needs to be converted to timestamp
-                    data: data that has the specified column
+        """Convert from Unix time to readable timestamp.
+
+        Args:
+            column (str): Column that needs to be converted to timestamp.
+            data (DataFrame): Data that has the specified column.
+
+        Returns:
+            list: List of converted timestamps.
         """
-    if column in data.columns.values:
-        timestamp_ = []
-        for time_unix in data[column]:
-            if time_unix == 0:
-                timestamp_.append(0)
-            else:
-                a = datetime.datetime.fromtimestamp(float(time_unix))
-                timestamp_.append(a.strftime('%Y-%m-%d %H:%M:%S'))
-        return timestamp_
-    else: 
-        print(f"{column} not in data")
+        if column in data.columns.values:
+            timestamp_ = [] 
+            for time_unix in data[column]:
+                if time_unix == 0:
+                    timestamp_.append(0)
+                else:
+                    a = datetime.datetime.fromtimestamp(float(time_unix))
+                    timestamp_.append(a.strftime('%Y-%m-%d %H:%M:%S'))
+            return timestamp_
+        else:
+            print(f"{column} not in data")
+
 
 def get_tagged_users(df):
     """get all @ in the messages"""
 
     return df['msg_content'].map(lambda x: re.findall(r'@U\w+', x))
-
-   
-
-
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Export Slack history')
