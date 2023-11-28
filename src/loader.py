@@ -32,7 +32,7 @@ class SlackDataLoader:
         '''
         path: path to the slack exported data folder
         '''
-        self.path = "/Users/mebmeressa/10academy/network_analysis_10xac/data/anonymized/"
+        self.path = "/Users/mebmeressa/10academy/network_analysis_10xac/data/"
         self.channels = self.get_channels()
         self.users = self.get_users()
     
