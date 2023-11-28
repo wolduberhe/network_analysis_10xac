@@ -5,7 +5,7 @@ import io
 import shutil
 import copy
 from datetime import datetime
-from pick import pick
+# from pick import pick
 from time import sleep
 
 
@@ -32,9 +32,9 @@ class SlackDataLoader:
         '''
         path: path to the slack exported data folder
         '''
-        self.path = path
+        self.path = "/Users/mebmeressa/10academy/network_analysis_10xac/data/anonymized/"
         self.channels = self.get_channels()
-        self.users = self.get_ussers()
+        self.users = self.get_users()
     
 
     def get_users(self):
@@ -71,7 +71,31 @@ class SlackDataLoader:
         for user in self.users:
             userNamesById[user['id']] = user['name']
             userIdsByName[user['name']] = user['id']
-        return userNamesById, userIdsByName        
+        return userNamesById, userIdsByName     
+    # those functions are copied from noteboo/parse_slack_data.ipynb
+    def convert_2_timestamp(column, data):
+        """convert from unix time to readable timestamp
+            args: column: columns that needs to be converted to timestamp
+                    data: data that has the specified column
+        """
+    if column in data.columns.values:
+        timestamp_ = []
+        for time_unix in data[column]:
+            if time_unix == 0:
+                timestamp_.append(0)
+            else:
+                a = datetime.datetime.fromtimestamp(float(time_unix))
+                timestamp_.append(a.strftime('%Y-%m-%d %H:%M:%S'))
+        return timestamp_
+    else: 
+        print(f"{column} not in data")
+
+def get_tagged_users(df):
+    """get all @ in the messages"""
+
+    return df['msg_content'].map(lambda x: re.findall(r'@U\w+', x))
+
+   
 
 
 
